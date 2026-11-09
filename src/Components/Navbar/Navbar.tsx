@@ -24,11 +24,13 @@ export function NavbarCom() {
   const navigate = useNavigate();
   if (!context) throw new Error();
 
-  const { setLogin,user } = context;
+  const { setLogin,setUser,user } = context;
 
   function logOut() {
     localStorage.removeItem("tkn");
+    localStorage.removeItem("user");
     setLogin(null);
+    setUser(null);
     navigate("/");
     toast.success("You Are Succefully Logged Out");
   }

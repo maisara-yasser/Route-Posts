@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 
 type propsPage = {
@@ -34,11 +34,19 @@ export default function AuthContextProvider({ children }: { children: React.Reac
     //lazy init
     const [isLogin, setLogin] = useState<null | string>(() => { return localStorage.getItem('tkn') });
     const [user, setUser] = useState<User | null>(getStoredUser);
-    // mounting
-    // useEffect(()=>{
-    //     if(localStorage.getItem('tkn'))
-    //         setLogin(localStorage.getItem('tkn'))
-    // },[])    
+    
+    useEffect(()=>{
+        function handleStorage(event:StorageEvent){
+            if(event.key === "tkn" && event.newValue === null){
+                setLogin(null);
+                setUser(null);
+            }
+        }
+        window.addEventListener("storage", handleStorage);
+        return ()=> window.removeEventListener("storage", handleStorage); 
+    },[]) 
+
+
 
     return <authContext.Provider value={{ isLogin, setLogin, user, setUser }}>
         {children}
