@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { timeAgo } from '../../../../Utilitis/time-age';
-import type { Post } from '../../../interfaces/posts.interface'
+import type { Post } from '../../interfaces/posts.interface'
 import AddComment from '../Comments/AddComment';
 import DropdownCom from './DropdownCom';
 import { useContext, useState } from 'react';
@@ -13,7 +13,7 @@ import { updatePost } from '../../Apis/Posts/update-post.api';
 
 
 
-export default function PostItem({ post , isSaved = false }: { post: Post ; isSaved?: boolean}) {
+export default function PostItem({ post, isSaved = false }: { post: Post; isSaved?: boolean }) {
 
     const context = useContext(authContext);
     if (!context)
@@ -34,12 +34,12 @@ export default function PostItem({ post , isSaved = false }: { post: Post ; isSa
     const { mutate, data, isPending } = useMutation({
         mutationFn: likePost,
         onSuccess: () => {
-            query.invalidateQueries({ queryKey: ['posts' ] });
+            query.invalidateQueries({ queryKey: ['posts'] });
             query.invalidateQueries({ queryKey: ['savedPosts'] });
         }
     })
 
-    
+
     // console.log(data);
 
 
@@ -123,7 +123,7 @@ export default function PostItem({ post , isSaved = false }: { post: Post ; isSa
                                 </div>
                             </div>
                             <div className="relative">
-                                <DropdownCom isEdit={true} fn={handleEdit} postId={post.user._id} postsId={post._id} userId={user?._id ?? ''} initialIsSaved={isSaved || post.bookmarked || false}/>
+                                <DropdownCom isEdit={true} fn={handleEdit} postId={post.user._id} postsId={post._id} userId={user?._id ?? ''} initialIsSaved={isSaved || post.bookmarked || false} />
                             </div>
                         </div>
                         {/* Post body */}
@@ -287,11 +287,11 @@ export function EditPost({ post, cancelEdit, userId }: { post: Post; cancelEdit:
     const [content, setContent] = useState<string>(post.body ?? '');
 
     const Query = useQueryClient();
-    
-    const {mutate:update,isPending:updatePending} = useMutation({
+
+    const { mutate: update, isPending: updatePending } = useMutation({
         mutationFn: updatePost,
-        onSuccess:()=>{
-            Query.invalidateQueries({queryKey:['posts']});
+        onSuccess: () => {
+            Query.invalidateQueries({ queryKey: ['posts'] });
             cancelEdit();
         }
     })

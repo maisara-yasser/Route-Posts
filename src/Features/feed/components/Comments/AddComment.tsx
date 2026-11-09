@@ -1,52 +1,52 @@
 import { useState } from "react";
-import type { Post } from "../../../interfaces/posts.interface";
+import type { Post } from "../../interfaces/posts.interface";
 import { addComment } from "../../Apis/comment/add-comment.api";
-import {  useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { HiX } from "react-icons/hi";
 import { toast } from "react-toastify";
 
 export default function AddComment({ post }: { post: Post }) {
 
     const [content, setContent] = useState<string>('');
-    const [image, setImage] = useState<File|null>(null);
+    const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string>('');
 
-    const query =  useQueryClient();
-    const {data,mutate} = useMutation({
-        onSuccess : (data) => {
-            query.invalidateQueries({queryKey:['comments', post._id]});
-            toast.success(data?.message );
+    const query = useQueryClient();
+    const { data, mutate } = useMutation({
+        onSuccess: (data) => {
+            query.invalidateQueries({ queryKey: ['comments', post._id] });
+            toast.success(data?.message);
         },
         mutationFn: addComment,
     });
     console.log(data);
-    
-// stop video 11:30 min 
-    function handleContent(e:React.ChangeEvent<HTMLInputElement>){
+
+    // stop video 11:30 min 
+    function handleContent(e: React.ChangeEvent<HTMLInputElement>) {
         setContent(e.target.value);
     }
-    function handleImage(e:React.ChangeEvent<HTMLInputElement>){
+    function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
-        if(!file) return;
-            setImage(file);  
+        if (!file) return;
+        setImage(file);
         const imgSrc = URL.createObjectURL(file);
         setImagePreview(imgSrc);
     }
-    async function handleComment(){
+    async function handleComment() {
         const formData = new FormData();
         formData.append('content', content);
-        if(image)
+        if (image)
             formData.append('image', image);
 
-        mutate({formData,postId:post._id});
+        mutate({ formData, postId: post._id });
         handleCancel();
     }
-    function handleCancel(){
+    function handleCancel() {
         setContent('');
         setImage(null);
         setImagePreview('');
     }
-    
+
     return (
         <>
             <div className="mt-3 p-2">
@@ -58,8 +58,8 @@ export default function AddComment({ post }: { post: Post }) {
                             "https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linkedPosts/default-profile.png"} />
                     <div className="w-full rounded-2xl border border-slate-200 px-2.5 py-1.5 focus-within:border-[#c7dafc]  "
                         data-comment-mention-root="true">
-                        <input type="text" 
-                            className='rounded-lg border-0 bg-gray-100 focus-within:bg-gray-200 w-full focus:border-2 border-blue-200' placeholder='add your comment ...' 
+                        <input type="text"
+                            className='rounded-lg border-0 bg-gray-100 focus-within:bg-gray-200 w-full focus:border-2 border-blue-200' placeholder='add your comment ...'
                             onChange={handleContent}
                             value={content}
                         />
@@ -136,7 +136,7 @@ export default function AddComment({ post }: { post: Post }) {
                         </div>
                         {imagePreview && (
                             <div className="relative w-50 h-50 m-2 overflow-hidden object-cover">
-                                <button onClick={()=>setImagePreview('')} className="absolute top-1 right-1 text-xl rounded-full text-white bg-gray-800 opacity-70 cursor-pointer"><HiX /></button>
+                                <button onClick={() => setImagePreview('')} className="absolute top-1 right-1 text-xl rounded-full text-white bg-gray-800 opacity-70 cursor-pointer"><HiX /></button>
                                 <img src={imagePreview} alt="" className="rounded-md" />
                             </div>
                         )}

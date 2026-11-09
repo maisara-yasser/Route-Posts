@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { getPostComments } from "../../Apis/comment/comment.api"
 import Loading from "../../../../Components/loading/Loading";
-import type { CommentInterface } from "../../../interfaces/Comments.interface";
+import type { CommentInterface } from "../../interfaces/Comments.interface";
 import CommentItem from "./CommentItem";
 
 export default function Comments({ id }: { id: string }) {

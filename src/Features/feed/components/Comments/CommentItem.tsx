@@ -1,5 +1,5 @@
 import { timeAgo } from "../../../../Utilitis/time-age";
-import type { CommentInterface } from "../../../interfaces/Comments.interface";
+import type { CommentInterface } from "../../interfaces/Comments.interface";
 import { AiOutlineLike } from "react-icons/ai";
 import { BsReply } from "react-icons/bs";
 import DropDownComm from "./DropDownComm";

@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../Components/loading/Loading";
 import PostItem from "../components/Posts/PostItem";
-import type { Post } from "../../interfaces/posts.interface";
+import type { Post } from "../interfaces/posts.interface";
 import { bookMark } from "../Apis/Posts/bookMarks.api";
 
 export default function SavedPost() {

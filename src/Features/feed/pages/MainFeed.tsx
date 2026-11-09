@@ -1,5 +1,5 @@
 import PostItem from "../components/Posts/PostItem";
-import type { Post } from "../../interfaces/posts.interface";
+import type { Post } from "../interfaces/posts.interface";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../../Components/loading/Loading";
 import { getPosts } from "../Apis/Posts/posts.api";
