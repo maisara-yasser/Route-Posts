@@ -16,7 +16,7 @@ import SavedPost from './Features/feed/pages/SavedPost'
 import MainFeed from './Features/feed/pages/MainFeed'
 import { lazy, Suspense } from 'react'
 import Loading from './Components/loading/Loading'
-import Settings from './Components/settings/Settings'
+import Settings from './Features/settings/Settings'
 // import Notifications from './Features/Notifications/Notifications'
 const Notifications = lazy(() => import('./Features/Notifications/Notifications'));
 
