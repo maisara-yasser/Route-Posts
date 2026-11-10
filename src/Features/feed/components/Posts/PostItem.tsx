@@ -11,7 +11,7 @@ import { BiLike } from "react-icons/bi";
 import { likePost } from '../../Apis/likes/like.api';
 import { updatePost } from '../../Apis/Posts/update-post.api';
 
-
+type PostsCache = { data: { posts: Post[] } };
 
 export default function PostItem({ post, isSaved = false }: { post: Post; isSaved?: boolean }) {
 
@@ -19,28 +19,57 @@ export default function PostItem({ post, isSaved = false }: { post: Post; isSave
     if (!context)
         throw new Error("Auth context is not available");
     const { user } = context;
-
-    // console.log(user._id);
+    const userId = user?._id ?? '';
+    
     const [isEdit, setEdit] = useState<boolean>(false);
-
+    
     function handleEdit() {
         setEdit(true)
     }
     function cancelEdit() {
         setEdit(false)
     }
-
+    function toggleLike(posts: Post[], postId: string): Post[] {
+        return posts.map((p) => {
+            if (p._id !== postId) return p;
+            const isLiked = p.likes.includes(userId);
+            return {
+                ...p,
+                likes: isLiked
+                    ? p.likes.filter((id) => id !== userId)
+                    : [...p.likes, userId],
+                likesCount: p.likesCount + (isLiked ? -1 : 1),
+            };
+        });
+    }
+    
     const query = useQueryClient();
-    const { mutate, data, isPending } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: likePost,
-        onSuccess: () => {
+        onMutate: async (postId: string) => {
+            await query.cancelQueries({ queryKey: ['posts'] });
+            const previous = query.getQueriesData<PostsCache>({ queryKey: ['posts'] });
+
+            query.setQueriesData<PostsCache>({ queryKey: ['posts'] }, (old) => {
+                if (!old?.data?.posts) return old;
+                return {
+                    ...old,
+                    data: { ...old.data, posts: toggleLike(old.data.posts, postId) },
+                };
+            });
+            return { previous };
+        },
+        onError: (_err, _postId, context) => {
+            context?.previous.forEach(([key, data]) => {
+                query.setQueryData(key, data);
+            });
+        },
+        onSettled: () => {
             query.invalidateQueries({ queryKey: ['posts'] });
             query.invalidateQueries({ queryKey: ['savedPosts'] });
         }
     })
-
-
-    // console.log(data);
+    const liked = post.likes.includes(userId);
 
 
     if (isEdit) {
@@ -214,11 +243,10 @@ export default function PostItem({ post, isSaved = false }: { post: Post; isSave
                     <div className="mx-4 border-t border-slate-200" />
                     <div className="grid grid-cols-3 gap-1 p-1">
                         <button
-                            disabled={isPending}
                             onClick={() => mutate(post._id)}
                             className="cursor-pointer flex items-center justify-center gap-1.5 rounded-md p-2 text-xs font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 sm:gap-2 sm:text-sm text-slate-600 hover:bg-slate-100"
                         >
-                            {data?.data?.liked ? <>
+                            {liked ? <>
                                 <BiSolidLike className='text-blue-400' /> <span className='text-blue-500'>Like</span>
                             </> : <>
                                 <BiLike /> <span>Like</span>

@@ -7,7 +7,6 @@ import RightAside from "./components/RightAside";
 import { Outlet } from "react-router-dom";
 import CreatePost from "./components/Posts/CreatePost";
 import { Helmet } from "react-helmet";
-// import axios from "axios";
 
 
 export default function Feed() {
