@@ -22,20 +22,7 @@ export default function Feed() {
         queryKey: ['posts'],// required
         queryFn: getPosts,// required
     });
-    // console.log('data', data);
-    // console.log('isLoading', isLoading);
-    // console.log('isError', isError);
-    // console.log('isFetching', isFetching);
-
-    //POST ,PUT ,DELETE (mutation)
-    // const { isLoading, isFetching, data, isError, error } = useQuery({
-    //     refetchInterval: 5000,
-    //     refetchOnMount: false,
-    //     staleTime: 3000,
-    //     refetchOnWindowFocus: false,
-    //     queryKey: ['posts'],
-    //     queryFn: getPosts,
-    // });
+    
 
     if (isLoading)
         return <Loading></Loading>

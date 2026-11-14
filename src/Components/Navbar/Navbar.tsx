@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import logo from "../../assets/route.png";
+import logo from "../../assets/GlobeSocial.png";
 import {
   Avatar,
   Dropdown,
@@ -48,10 +48,10 @@ export function NavbarCom() {
           <img
             src={logo}
             className="mr-3 h-6 sm:h-9 rounded-md"
-            alt="Route Posts Logo"
+            alt="Discover More Logo"
           />
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            Route Posts
+            Discover More
           </span>
         </NavbarBrand>
         <div className="flex gap-1 rounded-3xl border-2 overflow-hidden border-gray-400 ps-3 bg-cyan-50  md:order-2">
